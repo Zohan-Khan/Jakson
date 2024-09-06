@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jackson Theme Clone with Circular Profile Image and Counter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            width: 350px;
+            background-color: #2c3e50;
+            color: white;
+            height: 100vh;
+            padding: 20px;
+            position: fixed;
+            text-align: center;
+        }
+
+        /* Circular Profile Image */
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 4px solid white;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .sidebar h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .sidebar p {
+            margin-bottom: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            color: white;
+            margin: 0 10px;
+            font-size: 1.5em;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 350px;
+            padding: 50px;
+            width: calc(100% - 350px);
+        }
+
+        .section {
+            margin-bottom: 100px;
+        }
+
+        h2 {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        p {
+            font-size: 1.2em;
+            text-align: center;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Portfolio Grid */
+        .portfolio-items {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .portfolio-item {
+            width: 30%;
+            background-color: #ecf0f1;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: transform 0.5s, opacity 0.5s;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Image Styling */
+        .image-gallery {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .image-box {
+            width: 30%;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.6s ease;
+        }
+
+        .image-box img {
+            width: 100%;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Scroll-triggered animations */
+        .animate-left {
+            transform: translateX(-100px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .animate-right {
+            transform: translateX(100px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .animate-up {
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .animate-down {
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.8s ease;
+        }
+
+        .visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .visible-image {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Counter Section */
+        .counter {
+            text-align: center;
+            font-size: 3em;
+            margin-top: 50px;
+        }
+
+        .counter span {
+            display: block;
+            font-size: 2em;
+            color: #3498db;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Circular Profile Image -->
+        <div class="profile-image">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAJQAmAMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAEAAEDBQYCBwj/xAA6EAACAQMDAgQEBAQEBwEAAAABAgMABBEFEiExQQYTIlEyYXGBFEKRoSOxwdEHYnLwJDNDUlPh8RX/xAAaAQADAQEBAQAAAAAAAAAAAAACAwQBBQAG/8QAJhEAAgIBBAICAQUAAAAAAAAAAQIAAxEEEiExE0EiMmEFFFFxkf/aAAwDAQACEQMRAD8AtpNPl/BJLaOxfZuKk8N9KoRK8sq8FmJxXo/g+AXOkQcqQ0Yzn5cVNB4Ut4dTnvX5G3Kx54B7n/fzqMUCV3MpI2zEXFpLbW8bzFQWOCo7UCzkHir/AMUTpJqBhTGIhgge/wDsVRSKO1TsoDYmEqDxC9Mia5k6dKvJA8dl+G6Rl9+KpdIuPw7k8VbXN6kidRU1ilmwRxHqFxmXXh7UYmhFpK+JFJ2k9xQfjtXOmxKo4MvqPtwazFxNw21unQ10viG7ks3s7rFxEw9Jf4lPvmpP2BW0WpFORnEpWhAJyKjaHnAozAZiZHxx7c1G1/pVoN1y4bHHJ7/IDH86665ghcwKa3bHCk/QVALaU/kP6VexeOLK3jItNHtmXH/MnQAH7VLaf4g2Uk3l3Gj2UgP/AIrcLn7k08bh3BNQPUzhgkxnYTj2BNc424G0Futer2+l6L4j09L63Mlmi/EoYYH2oe58C2OoQBrHUQ0g+GTAPHscURJPBiygEwWra89nFbafa5jtkjV2VB8bEdT780Vonjie0lCizt1U8HcpLMPmc1p/EngLS4NCk23FxDdInpmLBg5AJ2njgfpXktgyw3G0tKGUjckowRSXXaPzL6XD4X1PcrW2sPENlHsiFvKDwA2VYHqB/OvN9ds2sL+a2brE7IfqD1/r961fhS9UQ27wEgrJhgfy8VSePsDxFMVGPMRZG/1FRn+Veos38e4rV1eJuOo3hXxKNJl8i7j8y3bqR8S/+qVZsimpVv6bp7W3N3Ixaw4nongrWrLSbSX8ZK2Xb4OuB7gVb6j4xjm0MzWW1Ll2KbH5Kjnn64rz/wAlxzzUbemqQ2ep7I/iFCVnYsxJJOTnqalA3jAoS39WKPA2DnrU9vBhZjLHiuy3GKYE9agaTnFCOYe7AjyAEEdKGfZCC/tUkjKRyeKpfEF/FaW5jLqJCPqwHyFGqEzyncYBq+ruzeVbtgdyahtNLu7gSTGKT0AbnfryOAP0rZ+BvC1sPLv9VQNcv6kt2wfK9s/5v5VsBYQIkqbF2tNvGB2wB/eq1XA4jeM8zxVU3lC/wcnHuaJijViSpAOa1Gq+FmijuLWIYZGMlux/Mvt9v65rF75Ld3ikUqwJyD2o63B4MXbUy8ianRvEs2kM9tI2LW4TYcnocftR+k+KbnSbsBWJTPHOcisRJMtzBhuQeooeC7liYxMQwX4c9x9feseoHmeruI4M+ifxFp4w8Pz2u/DyJgj2Ycg15JPo7RTvDIp3RMUKtjKkHoPlVn/h5r/lajHB+IC7jjy5Tg/Y/wBK23jPw1+LRtStk/igBpAB1AqZ1YjmUJYtbfHozL+HnWyhndhhUQELnuDVBql1JfXEtzOdzvJyft0o0yGO1aMcDPPzqolbceOlBQmDmI1Vxc4MjpUhT1VIpp3UUDcBc0QZfnQs+SwqVFIjIVaLGsTlt2/jZjp881Ixzj3qGLgCifJk8vzdh8vON2OKx15hjJnYPoxjr37ihces+lf3oxI3dGKqdqjLHsKGc7DkDOTgfOhAMb6ED1SQ2ttuaQqzj0JEPU365xWf8NaO2r+KEW6TZFbqZ5sc4wfSOfc/yrQToZJWdgDIwxn27faoZbO60/wTqupwqwlu5lRdnxeUvHHyJ3U+vPUJCvc2dvBbxSbrUKBnqpzVi0hIBrF/4a2F1Bp8ssrSG2n2vH5ibSGxhwPlnv3xWykBA5HbtWgESjIaVuo3MiIP+HaVV5G3qKwnijT47yE6jYAlh/zI8YNbG/8AEGk6ddCC9vIopD0UtzUlzY21/EZ7Zl/iLkshyHHvQDIO6NwpXE8RMpjJG7Cnr8qd5lK+rp71oPFWgXFtM0otuvxFOVPzx2rJSEr6ec1YjhlzOfZWUaaqzNzpV1Amp2bAON8Yf0ll9wa9w8E69BqVkLZBP6Ux/GbeB9+K8g1vWbbVvDLC2ZH8ny13zECZTkZ28Z/T51B4O1G6t7yBTdTbN64j8zg8+1T2McbpZ4Fz4xNx4rsBZ3EoQADOeKyLnJrc67IL2waQn1Bzg/Ik/txWLeIg9aClhJNTWVODIaau9vNPT8yXbL1lHamdMAGo9xPU1JnIpAEoLKYo+tavwg9u8stpdDKSDPPT55rKIPVRcecdT+tae4IODNX4iFjYaVFb2LK/nZ9QOcj61jW5dfkMippSSu0k7R2zxXAXPJrG7mkmdQ24uZ0gOF8zhmHYdzWwjMBhWDyk8lV2hMcY7CsrYgi8Rj39NWtx53lHyCPMHTI70It2mdHS0o9RPuW4kt1xbxAJs9ITGMfIU80btA/lBWcqduTxnt9qxmk+Ora4Z4NZRIrmKRlP8M7TgnBVuefrj61o7LXLG9c/g545OASFOcZ96fuHZgmk9ATyCXQNSuNfuotRtLiSaXdsIO1vMI9Lf5gD1HTFel6NpNxoV7NYZzbNGkyDsjEYYD5ZGfvWjFzn8x+XPSkzBhzya1irCeSh62zM/r1qJrOYFckqa8S1CDybqWNlxg4r6AvQDE2a8V8SWjtqs6RKWfdwB3NLpODPaldydSigXaw47YrSeHkRbmOQcsOhJ6VWvpd7ayIt7ayW7P8ACXXAP0rTaBpqmXdOgKr796K4gjEXplZDuPqa6WYHT4EU5G0kn3PT9Kz855q1mYYwvAxwB2FVE/xGk1LjiBqX3sTIM5anrlfjpU+Ry2U1OgyKgTmiI+lLOJqgmTW6xeZiZiqHqRWg0zw698m62u4yP9J/nVJbNHG26SPf7A9Ku7HWLosqjcqr02cAfagLYOTKqqwwx7kOsaBe2A3PCzJ/5I8sPvVXbwyS4KRuyk9VUkVtY9ZuB8Ux+hoS41OWG5WWOQqZmw4XgE4yD+1YbEPIjBo7MynGlXf4czC3lCrzuCGi9NuI7ockCVTyAf3o46hdSAvDcOsoGQW6H5GnbUWktSGjRA3xIoA9X2rxCnmUJTbWcTKz6DH50yJAu2R2fJHcnOc0+k+HodJne4i5lkADY4AHsKtm1BUOJdwGcbsZzS/FRSDKPkUt7ABOgPJkSRWNSrJjvihfNQDlhXTXUEVtJcMWeOIAuUG7GaQtpJwIVhCjLTi/nxG3lIXftgcCsXNpm+R1YA3LSB2f2J6AVfReJLK4eWO5jeBfys3OR88dKhfU9KtjiFmkI6BVP8zTfmRxE120DljBr+FpdKeK7cuBJGU3clWBOcfYUNbyIg2jgdq4vb1rxAceWqMdqA8YP9aGR+lOrrO3mc/Vaje529SweTI60BMck1KGJFQSmmKMGQuciQZwaVMetKnRM0VnaPMQqjr2q/j8PSrDuwc4zXOiGNJ134rYieEw8EdPeubZawPEvRFAmFexeJsMCPrXQMkabF9I65FXd6Y3lJGKr7oLjijR9w5mlShysAa6e2ilmYlgiFyvvjtQaaxDqOxreTlDlkPVcDvUt4vmwSxr1ZSKpNK04wySz7cbhtH0/wB/yrz7ROp+mrvUsT7mih1B4wecijbe5N5dJGmAoxI30x/es9IHUHg1aeGz5Vo80nxSNx/pFMrMt1CBckQ69t8yYA4UVzJp4SRpBIFiYA4PXPfFdz3Ks5CnJapOHC72yQMde1ECvORJHRzt5xKy4XnCg496t9EuCltJC0MclvIMNvGQw+VRJAk0h4PlKeefiPtXUlysTMF7KAoHvQhADumvtdfHiRX/AIQsb/dJpZNvKeRC7ZQ/IHqKw2oWE9hdPbXELxSqeVf+/wDWvSLed0QM5w3ypagtnqyxpqNsk+zhWyVcD6iiD47nOt0rj6zzBW4204OK3lx/h/b3cBl0W7dJBk/h7ghgfow5H3zWHu7WeyupLa7jaKaNtrIw5/8AlPGPU55yDgzqNuK4emQ4pmasmGc7aekDSoswdsvvPdPhyKKivpyAN7YoZU31MkeKn2qYxXYSxgkeVWJkAKjOD+aiTDuXk0HbDbyaOEoK9qVtwZQGyJXXcBjOR9q5hZ2GCRj6CjLn+IooCUFVwO9Y7qo5lWl09zt8DgQXU53SErbyIkx6EYJH61zDqZ8sGdMnbhmAwf0oeRE3t5rAccGopbtY12xb3IH/AEkAA+5oVYnkT6AU7UCscy6tt2PNyr8enHXFSC6IG1ZOSQuc5xWeTVnhgxIGQ7eCw/tUsFzOioy3cYUjgeXwaPI7meEzYLPFHAuxxt6CqqW5Rbsq8g91PvVVJqLNIFVskjkLVXqTu7BwGyORRF8xSaXacmbb/wDQt0UKSSR+9KLUC7YhjP3rM6fskjVyzu3sx5FWy3BjXhQKBjnuMNC44mjsrzYw3ksT2ViMfpUXjGyg8QWYn0+HfqVsvMaDJdO4z7jqB1qhiuHOArepuPp9K0GmXRs4dkXHpwfnWpeE4M5Ws0API7mMs/Dd87ZvE/Bxjr5vx/Zev64oLVbB7NjIUMcLPtiWRhvIx1I7fet1POspJMaqAd28DBrK+JnmQFHsUijk6XHxFvoe1bXqC78dTn3aUVpk9ygUkcUqZeDyaVVEyXbNNB1xRiKagtbWX495Kf5qNRTj09ak8gzH06W113dCNyBXUQJOM4pyr49VPHHnmvM5A6j6tMpcAsJLs4wO1VlwzysY4lzj8wq6WxZrVpmbCA4HONxqslfy3WKNQXb4QPb3pS1Fjkzs12qn1g0Gnh2JlIZl/QU99DDawEhfUxwAByT7VYrst4toOSeWPvQq2pupvMkJ2jj/AEj2H96fgD4iGLCTubqUcVg13uldcpnC57mitP0gPNNHuZFVB6QeMnNW8oRWCp6UiHGPalYcXLZ/6sIb9z/SmU1gtzJ9VqnVMj3A7bTYI4iGTLPkbj2Yc/vRw0m3kJeNQFbBxjpRKRrvdGGQ3P0PvXdsRFcPCemNy/T/AO03AHGJF5nbnJktn4fS7O1WCy44z0NBXWnNEzQkfxEOGTuK0VjKYpo3HZuas/EPh+31y2VwxiulGYp0OCPkflU/h8mcdzG11lDD2pnl2q2JaaJSp2gcYodrl7WNYYpH353Ehicey1Lq8eqWdw9nfSTBl7Mc5HuD3qtiRmYKoJYnAA5JNJSjaxLR2p1xtrCLxJ7m8uLhdtxMzr/2npUFvbvd3ENuCfWwAHXH+xXL5BIIII96vPBEAuNfhUozDa2MDgHHf2HWnqB6nMzk/IyTxL4fS0t4bm3h8tBhW/zDsfrSr0rV7CybTT+NP/Dx8tnHQc4/alTSpHuD5VbnE89hVrfchJK9VzRNv6gSaCN/E+Y2RkcH83SiIZiiehN5PSo1ASU5e3CJ0IRJwuaaM468A1GfxbjPlKoPbNO5KL6uvfFN3E9RtWlwclv8hN7eSTRrGmAqDC+wqvgjEDOzNukfqx/lTrdRl/Lzh+wPQ1GZXuJfJs9rN+aTqqf3PyocsZ1UREXiSYeWYRR8vjLE9FHuaMYrFGEjzgc4PWmghS2i2Jk5OWcnlj7mmwZWPrUYGSSaaBtEQX8h/Agl7Ji3W3UEPO4T7Hr+1EfDqye3k7R+tV9pm51NJeTGjFUz8u9WE/pv4Ce64qisYXMg1Lb7NvrENI5zUF9/DeC4/wC1tp+howCuLuPzLZxjnFZZwINPOIZbvuAI7itPp9wWtBjkoOnyrHae/wDDA9qvtNn8pgOxNI3YbIg6mrcv9QvXtFtdesdj4WReY5B1U+30ry/UtFuNNnZHQpIh4IP7g16wzm2mBTJjfnim1LTrbVrXawG7HpcdVNE4Fg/Mjqfx8HqeISxSYZmyeepNT6Tqt5pEzPZsisw5LD/fvWi1bRZLO/8AJmTAJ4I6EVJceH47eDzSM7h7VOb9hCmOZB2sqdU8Q3+rRxRXLny0X4R+Zu5NNUdxbCJ/QOKVGXB5mAYlnNbRSqWdecdqfSiYrprYHdGPUN3UUqVTDqX6/wCL/HiXKqPIlk/MPSKqrwkKaalVS/WZpPrKK4Je5jQkgM4Bx9a1FrEkUZjjUKoHalSo1lt3UUpwCfaqzVJWisZChwSR+9KlXm7EBfoZPpqLGlsq9Agoi94lhPcGmpVU31nLH3ljH0qQj0H6UqVLs6jKu4Na8PxVvbHDilSqSVWe5cqd9gxbqjcU1pIw6GnpUR4InKwNpnPiG2iuNLeSRfXF60YdQaGvIUfSdzDnywf2pUqk1n2UwKzxMHNGrA596VKlWZlM/9k=" alt="Profile Image">
+        </div>
+        <h1>Noor-Us-Sahar</h1>
+        <p>Web Developer</p>
+        <p>Email: example@email.com</p>
+        <p>Phone: 123-456-7890</p>
+        <p>Location: Karachi, Pakistan</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- About Section -->
+        <section class="section about animate-left">
+            <h2>About Me</h2>
+            <p>Hello, I am Noor-Us-Sahar, a passionate web developer skilled in front-end development with expertise in HTML, CSS, JavaScript, and frameworks like React.</p>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section class="section portfolio animate-right">
+            <h2>Portfolio</h2>
+            <p>Hello, I am Noor-Us-Sahar, a passionate web developer skilled in front-end development with expertise in HTML, CSS, JavaScript, and frameworks like React.</p>
+            <img>
+            <div class="image-gallery">
+                <div class="image-box">
+                    <img src="https://strapi.dhiwise.com/uploads/618fa90c201104b94458e1fb_64ddaad8a9f28a05829f9aee_html_and_css_ai_generator_OG_Image_34a8e90ccf.jpg" alt="Gallery Image 1">
+            
+           
+        <!-- Image Section with Scroll Animations -->
+        <section class="section images">
+            <h2>Gallery</h2>
+            <div class="image-gallery">
+                <div class="image-box">
+                    <img src="https://preview.colorlib.com/theme/jackson/images/cover_bg_1.jpg" alt="Gallery Image 1">
+                </div>
+                <div class="image-box">
+                    <img src="https://preview.colorlib.com/theme/jackson/images/img-3.jpg" alt="Gallery Image 2">
+                </div>
+                <div class="image-box">
+                    <img src="https://preview.colorlib.com/theme/jackson/images/blog-3.jpg" alt="Gallery Image 3">
+                </div>
+            </div>
+        </section>
+
+        <!-- Counter Section -->
+        <section class="section counter">
+            <h2>Statistics</h2>
+            <div class="counter-container">
+                <span id="counter">0</span>
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript for Scroll Animations and Counter -->
+    <script>
+        window.addEventListener('scroll', function() {
+            let sections = document.querySelectorAll('.animate-left, .animate-right, .animate-up, .animate-down');
+            let images = document.querySelectorAll('.image-box');
+            let windowHeight = window.innerHeight;
+
+            // Trigger animations for text sections
+            sections.forEach(function(section) {
+                let positionFromTop = section.getBoundingClientRect().top;
+                if (positionFromTop - windowHeight <= 0) {
+                    section.classList.add('visible');
+                }
+            });
+
+            // Trigger animations for images
+            images.forEach(function(image) {
+                let positionFromTop = image.getBoundingClientRect().top;
+                if (positionFromTop - windowHeight <= 0) {
+                    image.classList.add('visible-image');
+                }
+            });
+
+            // Counter Animation
+            let counterElement = document.getElementById('counter');
+            let counterPosition = counterElement.getBoundingClientRect().top;
+            if (counterPosition - windowHeight <= 0) {
+                let startValue = 0;
+                let endValue = 10000;
+                let duration = 3000; // Duration in milliseconds
+                let startTime = null;
+
+                function animateCounter(currentTime) {
+                    if (startTime === null) startTime = currentTime;
+                    let elapsedTime = currentTime - startTime;
+                    let progress = Math.min(elapsedTime / duration, 1);
+                    let value = Math.floor(progress * endValue);
+                    counterElement.textContent = value;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animateCounter);
+                    }
+                }
+
+                requestAnimationFrame(animateCounter);
+            }
+        });
+    </script>
+
+</body>
+</html>
